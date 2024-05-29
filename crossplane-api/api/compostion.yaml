@@ -1,0 +1,30 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: a8s-dummy
+spec:
+  compositeTypeRef:
+    apiVersion: interview.interview.com/v1alpha1
+    kind: XDummy
+  resources:
+    - name: a8s-dummy
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          forProvider:
+            manifest:
+              apiVersion: interview.interview.com/v1alpha1
+              kind: Dummy
+          providerConfigRef:
+            name: kubernetes-provider
+        patches:
+          - fromFieldPath: "metadata.labels[crossplane.io/claim-namespace]"
+            toFieldPath: "metadata.namespace"
+          - fromFieldPath: "metadata.labels[crossplane.io/composite]"
+            toFieldPath: "metadata.name"
+          - fromFieldPath: "metadata.labels[crossplane.io/claim-name]"
+            toFieldPath: "metadata.name"
+          - fromFieldPath: spec.message
+            toFieldPath: spec.forProvider.message
+---

@@ -1,0 +1,36 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xdummies.interview.interview.com
+spec:
+  group: interview.interview.com
+  names:
+    kind: XDummy
+    plural: xdummies
+  claimNames:
+    kind: Dummy
+    plural: dummies
+  defaultCompositionRef:
+    name: a8s-dummy    
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              message: 
+                type: string
+          status:
+            type: object
+            properties:
+              message: 
+                type: string
+              specEcho:
+                type: string
+              podStatus:
+                type: string

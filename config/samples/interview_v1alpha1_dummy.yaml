@@ -1,0 +1,10 @@
+apiVersion: interview.interview.com/v1alpha1
+kind: Dummy
+metadata:
+  name: dummy-sample
+  namespace: default
+spec:
+  message: "Hello, K8s operators!"
+  compositionRef:
+    name: a8s-dummy
+
