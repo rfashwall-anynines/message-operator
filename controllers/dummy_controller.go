@@ -64,7 +64,7 @@ func (r *DummyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		return ctrl.Result{}, err
 	}
 
-	logger.Info("Processing Dummy", "name", dummy.Name, "namespace", dummy.Namespace, "message", dummy.Spec.ForProvider.Message)
+	logger.Info("Processing Dummy", "name", dummy.Name, "namespace", req.NamespacedName.Namespace, "message", dummy.Spec.ForProvider.Message)
 
 	// Copy spec.message to status.specEcho and update sttus
 	dummy.Status.AtProvider.SpecEcho = dummy.Spec.ForProvider.Message
@@ -75,11 +75,15 @@ func (r *DummyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 	// check pod if exists
 	pod := &corev1.Pod{}
-	err = r.Get(ctx, types.NamespacedName{Namespace: dummy.Namespace, Name: dummy.Name}, pod)
+	ns := req.NamespacedName.Namespace
+	if ns == "" {
+		ns = "default"
+	}
+	err = r.Get(ctx, types.NamespacedName{Namespace: ns, Name: dummy.Name}, pod)
 	if kerrors.IsNotFound(err) {
 		// create a new Pod when pod not found
 		logger.Info("Creating Pod", "name", pod.Name, "namespace", pod.Namespace)
-		pod, err = r.createPod(ctx, &dummy)
+		pod, err = r.createPod(ctx, &dummy, ns)
 		if err != nil {
 			return ctrl.Result{}, err
 		}
@@ -120,11 +124,11 @@ func (r *DummyReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 // createPod create a new pod with nginx image, and associate it with the dummy object
-func (r *DummyReconciler) createPod(ctx context.Context, dummy *interviewv1alpha1.Dummy) (*corev1.Pod, error) {
+func (r *DummyReconciler) createPod(ctx context.Context, dummy *interviewv1alpha1.Dummy, ns string) (*corev1.Pod, error) {
 	pod := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      dummy.Name,
-			Namespace: dummy.Namespace,
+			Namespace: ns,
 		},
 		Spec: corev1.PodSpec{
 			Containers: []corev1.Container{

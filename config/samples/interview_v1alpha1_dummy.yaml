@@ -1,5 +1,5 @@
 apiVersion: interview.interview.com/v1alpha1
-kind: Dummy
+kind: XDummy
 metadata:
   name: dummy-sample
   namespace: default

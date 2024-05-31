@@ -52,10 +52,9 @@ type DummyStatus struct {
 	AtProvider          DummyObservation `json:"atProvider,omitempty"`
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
-
-// Dummy is the Schema for the dummies API
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:scope=Cluster,categories={crossplane,managed}
 type Dummy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

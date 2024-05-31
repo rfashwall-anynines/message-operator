@@ -9,16 +9,18 @@ metadata:
 spec:
   group: interview.interview.com
   names:
+    categories:
+    - crossplane
+    - managed
     kind: Dummy
     listKind: DummyList
     plural: dummies
     singular: dummy
-  scope: Namespaced
+  scope: Cluster
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Dummy is the Schema for the dummies API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation

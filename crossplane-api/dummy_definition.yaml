@@ -28,9 +28,6 @@ spec:
           status:
             type: object
             properties:
-              message: 
-                type: string
-              specEcho:
-                type: string
-              podStatus:
-                type: string
+              managed:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
